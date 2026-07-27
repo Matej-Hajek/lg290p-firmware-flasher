@@ -1,19 +1,19 @@
 # LG290P bootloader upgrade protocol
 
 Complete wire specification for the Quectel LG290P(03) UART firmware-upgrade
-protocol, as implemented by `lg290p_flash.py`. Source: *Quectel LG290P(03) &
-LGx80P(03) Firmware Upgrade Guide V1.1*, cross-checked against real traffic.
+protocol, as implemented by `lg290p_flash.py`. Source: _Quectel LG290P(03) &
+LGx80P(03) Firmware Upgrade Guide V1.1_, cross-checked against real traffic.
 
 All multi-byte integers are **big-endian** unless stated otherwise. The four
 sync/response words are the exception: they go **little-endian** on the wire.
 
 ## Physical layer
 
-| Parameter | Value |
-| --- | --- |
-| Baud | 460800 |
+| Parameter    | Value                              |
+| ------------ | ---------------------------------- |
+| Baud         | 460800                             |
 | Frame format | 8 data bits, 1 stop bit, no parity |
-| Flow control | none |
+| Flow control | none                               |
 
 The bootloader only listens for the sync sequence for **~500 ms after a reset**.
 If it doesn't sync in that window it boots the existing application instead.
@@ -34,12 +34,12 @@ Two ways to get the ~500 ms window to open:
 
 Words (little-endian on the wire):
 
-| Name | Value | Wire bytes |
-| --- | --- | --- |
+| Name         | Value        | Wire bytes    |
+| ------------ | ------------ | ------------- |
 | `SYNC_WORD1` | `0x514C1309` | `09 13 4C 51` |
-| `RSP_WORD1` | `0xAAFC3A4D` | `4D 3A FC AA` |
+| `RSP_WORD1`  | `0xAAFC3A4D` | `4D 3A FC AA` |
 | `SYNC_WORD2` | `0x1203A504` | `04 A5 03 12` |
-| `RSP_WORD2` | `0x55FD5BA0` | `A0 5B FD 55` |
+| `RSP_WORD2`  | `0x55FD5BA0` | `A0 5B FD 55` |
 
 1. Host repeatedly sends `SYNC_WORD1` (~20–95 ms apart) until the module replies
    `RSP_WORD1`.
@@ -63,16 +63,16 @@ Words (little-endian on the wire):
 ## Messages (ClassID = `0x02`)
 
 `ClassID 0x02` is the **only** class the bootloader handles (verified by
-scanning all 256 class IDs — every other value returns *unsupported*).
+scanning all 256 class IDs — every other value returns _unsupported_).
 
-| MsgID | Direction | Meaning |
-| --- | --- | --- |
-| `0x02` | host → module | Firmware Information |
-| `0x03` | host → module | Erase firmware |
-| `0x04` | host → module | Firmware data packet |
-| `0x31` | host → module | Reset module |
+| MsgID  | Direction     | Meaning                  |
+| ------ | ------------- | ------------------------ |
+| `0x02` | host → module | Firmware Information     |
+| `0x03` | host → module | Erase firmware           |
+| `0x04` | host → module | Firmware data packet     |
+| `0x31` | host → module | Reset module             |
 | `0x71` | host → module | Query bootloader version |
-| `0x00` | module → host | Response |
+| `0x00` | module → host | Response                 |
 
 A scan of all 256 MsgIDs found **no** hidden/debug/memory-dump commands — the set
 above is complete.
@@ -84,28 +84,28 @@ The echoed ClassID/MsgID mirror the command being answered.
 
 Status codes:
 
-| Status | Meaning |
-| --- | --- |
-| `0x0000` | OK |
-| `0x0001` | unknown error |
-| `0x0002` | CRC32 error |
-| `0x0003` | timeout |
+| Status   | Meaning             |
+| -------- | ------------------- |
+| `0x0000` | OK                  |
+| `0x0001` | unknown error       |
+| `0x0002` | CRC32 error         |
+| `0x0003` | timeout             |
 | `0x0004` | unsupported message |
-| `0x0005` | package error |
-| `0x0020` | flash erase error |
-| `0x0021` | flash write error |
+| `0x0005` | package error       |
+| `0x0020` | flash erase error   |
+| `0x0021` | flash write error   |
 
 `0x71` additionally returns 3 version bytes after the status (observed
 `01 00 06` = bootloader v1.0.6).
 
 ### Firmware Information (`MsgID 0x02`) — 16-byte payload
 
-| Field | Bytes | Notes |
-| --- | --- | --- |
-| FW_Size | 4 (BE) | size of the whole `.pkg` in bytes |
+| Field    | Bytes  | Notes                                                                                                  |
+| -------- | ------ | ------------------------------------------------------------------------------------------------------ |
+| FW_Size  | 4 (BE) | size of the whole `.pkg` in bytes                                                                      |
 | FW_CRC32 | 4 (BE) | `crc32( struct.pack('<I', size) ++ firmware )` — size is prefixed **little-endian** into the CRC input |
-| DestAddr | 4 (BE) | fixed `0x00000000` |
-| Reserved | 4 | `0x00000000` |
+| DestAddr | 4 (BE) | fixed `0x00000000`                                                                                     |
+| Reserved | 4      | `0x00000000`                                                                                           |
 
 ### Data packet (`MsgID 0x04`)
 
@@ -130,11 +130,11 @@ Reset ──────────────────  module reboots int
 
 ## Reference frames (verified against real hardware)
 
-| What | Bytes (hex) |
-| --- | --- |
-| Erase command | `AA 02 03 0000 890BA9CE 55` |
+| What                                                                                    | Bytes (hex)                                                     |
+| --------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| Erase command                                                                           | `AA 02 03 0000 890BA9CE 55`                                     |
 | Firmware Information for `LG290P03AANR02A02S.pkg` (size `0x00292B20`, CRC `0x42194628`) | `AA 02 02 0010 00292B20 42194628 00000000 00000000 CA05D7C1 55` |
-| Bootloader-version response payload | `02 71 0000 010006` |
+| Bootloader-version response payload                                                     | `02 71 0000 010006`                                             |
 
 ## Notes on security (from reverse engineering)
 

@@ -38,14 +38,14 @@ python lg290p_flash.py firmware.pkg --auto-reset --port /dev/ttyACM0 --baud 4608
 
 Key options:
 
-| Option | Meaning |
-| --- | --- |
-| `--auto-reset` | Send `$PQTMSRR` then sync — no manual USB power-cycle, no 500 ms timing to hit by hand. |
-| `--reset-baud N` | Baud for the `$PQTMSRR` reset if the running app uses a different rate than the bootloader. |
-| `--query-only` | Enter the bootloader and read its version; make no changes. **Recommended first step.** |
-| `--dry-run` | Parse the firmware only; never touch the serial port. |
-| `--port` / `--baud` | Serial port (auto-detected if omitted) and baud (default `460800`). |
-| `--yes` | Skip the interactive confirmation. |
+| Option              | Meaning                                                                                     |
+| ------------------- | ------------------------------------------------------------------------------------------- |
+| `--auto-reset`      | Send `$PQTMSRR` then sync — no manual USB power-cycle, no 500 ms timing to hit by hand.     |
+| `--reset-baud N`    | Baud for the `$PQTMSRR` reset if the running app uses a different rate than the bootloader. |
+| `--query-only`      | Enter the bootloader and read its version; make no changes. **Recommended first step.**     |
+| `--dry-run`         | Parse the firmware only; never touch the serial port.                                       |
+| `--port` / `--baud` | Serial port (auto-detected if omitted) and baud (default `460800`).                         |
+| `--yes`             | Skip the interactive confirmation.                                                          |
 
 If you don't use `--auto-reset`, the tool asks you to power-cycle the module during the sync window instead.
 
@@ -73,8 +73,8 @@ python -m unittest discover -s tests -v
 
 ## Hardware tested
 
-| Board | Bridge | From → To | Result |
-| --- | --- | --- | --- |
+| Board                            | Bridge            | From → To       | Result     |
+| -------------------------------- | ----------------- | --------------- | ---------- |
 | Waveshare LG290P GNSS RTK Module | CH34x (1a86:55d3) | R01A06 → R02A02 | ✅ success |
 
 Reports for other boards/firmware welcome via [issues](../../issues).

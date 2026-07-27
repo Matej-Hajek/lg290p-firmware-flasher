@@ -11,12 +11,12 @@ boards (RTS/DTR reset not wired); this tool resets in software instead.
 
 ## Repository map
 
-| Path | Purpose |
-| --- | --- |
-| `lg290p_flash.py` | The whole tool: pure protocol helpers + a `Flasher` class + a CLI (`main`). |
-| `tests/test_protocol.py` | `unittest` tests for the pure logic; no hardware needed. |
-| `PROTOCOL.md` | Authoritative wire specification. **Read this before changing framing/CRC/sequence.** |
-| `README.md` | User-facing docs. |
+| Path                     | Purpose                                                                               |
+| ------------------------ | ------------------------------------------------------------------------------------- |
+| `lg290p_flash.py`        | The whole tool: pure protocol helpers + a `Flasher` class + a CLI (`main`).           |
+| `tests/test_protocol.py` | `unittest` tests for the pure logic; no hardware needed.                              |
+| `PROTOCOL.md`            | Authoritative wire specification. **Read this before changing framing/CRC/sequence.** |
+| `README.md`              | User-facing docs.                                                                     |
 
 ## Design rules
 
