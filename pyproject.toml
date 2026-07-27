@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lg290p-firmware-flasher"
+version = "0.1.0"
+description = "Flash Quectel LG290P(03) GNSS firmware over UART, no Windows/QGNSS."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Matěj Hájek" }]
+requires-python = ">=3.9"
+dependencies = ["pyserial>=3.5"]
+keywords = ["quectel", "lg290p", "gnss", "firmware", "flash", "uart", "rtk"]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: System :: Hardware",
+    "Operating System :: POSIX :: Linux",
+]
+
+[project.urls]
+Homepage = "https://github.com/Matej-Hajek/lg290p-firmware-flasher"
+Issues = "https://github.com/Matej-Hajek/lg290p-firmware-flasher/issues"
+
+[project.scripts]
+lg290p-flash = "lg290p_flash:main"
+
+[tool.setuptools]
+py-modules = ["lg290p_flash"]
